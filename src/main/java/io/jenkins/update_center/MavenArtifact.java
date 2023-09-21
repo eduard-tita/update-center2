@@ -24,6 +24,7 @@
 package io.jenkins.update_center;
 
 import hudson.util.VersionNumber;
+import io.jenkins.update_center.MavenRepository.ArtifactMetadata;
 import io.jenkins.update_center.util.Environment;
 
 import javax.annotation.Nonnull;
@@ -45,7 +46,8 @@ import java.util.jar.Manifest;
  * @author Kohsuke Kawaguchi
  */
 public class MavenArtifact {
-    protected static final String DOWNLOADS_ROOT_URL = Environment.getString("DOWNLOADS_ROOT_URL", "https://updates.jenkins.io/download");
+    protected static final String DOWNLOADS_ROOT_URL =
+        Environment.getString("DOWNLOADS_ROOT_URL", "http://localhost:8888/download");
     /**
      * Where did this plugin come from?
      */
@@ -116,7 +118,8 @@ public class MavenArtifact {
     }
 
     public long getTimestamp() throws IOException {
-        return repository.getMetadata(this).timestamp;
+        ArtifactMetadata metadata = repository.getMetadata(this);
+        return metadata != null ? metadata.timestamp : 0L;
     }
 
     public Manifest getManifest() throws IOException {

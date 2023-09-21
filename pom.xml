@@ -266,6 +266,19 @@
       <version>4.10.0</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>de.schlichtherle.truezip</groupId>
+      <artifactId>truezip-file</artifactId>
+      <version>7.7.10</version>
+      <exclusions>
+        <exclusion>
+          <!-- unneeded cruft that should have been declared optional by truezip -->
+          <groupId>com.google.code.findbugs</groupId>
+          <artifactId>annotations</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
 
   <repositories>

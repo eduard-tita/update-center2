@@ -74,7 +74,7 @@ public class UpdateCenterRoot extends WithSignature {
             }
         }
 
-        core = new UpdateCenterCore(repo.getJenkinsWarsByVersionNumber());
+        core = new UpdateCenterCore();
     }
 
     private static UpdateCenterDeprecation deprecationForPlugin(String artifactId) {

@@ -4,8 +4,8 @@ import io.jenkins.update_center.util.Environment;
 
 public class DefaultMavenRepositoryBuilder {
 
-    private static String ARTIFACTORY_API_USERNAME = Environment.getString("ARTIFACTORY_USERNAME");
-    private static String ARTIFACTORY_API_PASSWORD = Environment.getString("ARTIFACTORY_PASSWORD");
+    private static String API_USERNAME = Environment.getString("NXRM_USERNAME");
+    private static String API_PASSWORD = Environment.getString("NXRM_PASSWORD");
 
     private DefaultMavenRepositoryBuilder () {
         
@@ -15,8 +15,8 @@ public class DefaultMavenRepositoryBuilder {
     
     public static synchronized BaseMavenRepository getInstance() {
         if (instance == null) {
-            if (ARTIFACTORY_API_PASSWORD != null && ARTIFACTORY_API_USERNAME != null) {
-                instance = new ArtifactoryRepositoryImpl(ARTIFACTORY_API_USERNAME, ARTIFACTORY_API_PASSWORD);
+            if (API_PASSWORD != null && API_USERNAME != null) {
+                instance = new NxrmRepositoryImpl(API_USERNAME, API_PASSWORD);
             } else {
                 throw new IllegalStateException("ARTIFACTORY_USERNAME and ARTIFACTORY_PASSWORD need to be set");
             }

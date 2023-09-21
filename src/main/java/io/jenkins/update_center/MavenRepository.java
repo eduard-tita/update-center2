@@ -82,5 +82,15 @@ public interface MavenRepository {
          *
          */
         public long size;
+
+        @Override
+        public String toString() {
+            return "ArtifactMetadata{" +
+                    "sha1='" + sha1 + '\'' +
+                    ", sha256='" + sha256 + '\'' +
+                    ", timestamp=" + timestamp +
+                    ", size=" + size +
+                    '}';
+        }
     }
 }

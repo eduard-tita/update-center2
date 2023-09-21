@@ -23,16 +23,16 @@ public class PluginUpdateCenterEntry {
      * Plugin artifact ID.
      */
     @JSONField(name = "name")
-    public final String artifactId;
+    public String artifactId;
     /**
      * Latest version of this plugin.
      */
-    private transient final HPI latestOffered;
+    private transient HPI latestOffered;
     /**
      * Previous version of this plugin.
      */
     @CheckForNull
-    private transient final HPI previousOffered;
+    private transient HPI previousOffered;
 
     private PluginUpdateCenterEntry(String artifactId, HPI latestOffered, HPI previousOffered) {
         this.artifactId = artifactId;
@@ -40,31 +40,35 @@ public class PluginUpdateCenterEntry {
         this.previousOffered = previousOffered;
     }
 
+    // for JSON deser.
+    public PluginUpdateCenterEntry() {}
+
     public PluginUpdateCenterEntry(Plugin plugin) throws IOException {
         this.artifactId = plugin.getArtifactId();
         HPI previous = null, latest = null;
 
         Iterator<HPI> it = plugin.getArtifacts().values().iterator();
 
+        // FIXME temporarily drop validation
         while (latest == null && it.hasNext()) {
             HPI h = it.next();
-            try {
-                h.validate();
-            } catch (IOException e) {
-                LOGGER.log(Level.WARNING, "Failed to resolve "+h+". Dropping this version.",e);
-                continue;
-            }
+//            try {
+//                h.validate();
+//            } catch (IOException e) {
+//                LOGGER.log(Level.WARNING, "Failed to resolve "+h+". Dropping this version.",e);
+//                continue;
+//            }
             latest = h;
         }
 
         while (previous == null && it.hasNext()) {
             HPI h = it.next();
-            try {
-                h.validate();
-            } catch (IOException e) {
-                LOGGER.log(Level.WARNING, "Failed to resolve "+h+". Dropping this version.",e);
-                continue;
-            }
+//            try {
+//                h.validate();
+//            } catch (IOException e) {
+//                LOGGER.log(Level.WARNING, "Failed to resolve "+h+". Dropping this version.",e);
+//                continue;
+//            }
             previous = h;
         }
 

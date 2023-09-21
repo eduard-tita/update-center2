@@ -31,6 +31,9 @@ public class UpdateCenterCore {
     @JSONField
     public long size;
 
+    public UpdateCenterCore() {
+    }
+
     UpdateCenterCore(TreeMap<VersionNumber, JenkinsWar> jenkinsWarsByVersionNumber) throws IOException {
         if (jenkinsWarsByVersionNumber.isEmpty()) {
             return;

@@ -24,13 +24,10 @@ echo "Bash: $BASH_VERSION" >&2
 
 # platform specific behavior
 UNAME="$( uname )"
-if [[ $UNAME == Linux ]] ; then
-  SORT="sort"
-elif [[ $UNAME == Darwin ]] ; then
+if [[ $UNAME == Darwin ]] ; then
   SORT="gsort"
 else
-  echo "Unknown platform: $UNAME" >&2
-  exit 1
+  SORT="sort"
 fi
 
 function test_which {

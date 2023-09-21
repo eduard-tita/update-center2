@@ -204,11 +204,13 @@ public class HPI extends MavenArtifact {
 
     public static class Dependency {
         @JSONField
-        public final String name;
+        public String name;
         @JSONField
-        public final String version;
+        public String version;
         @JSONField
-        public final boolean optional;
+        public boolean optional;
+
+        public Dependency() {}
 
         public Dependency(String token) {
             this.optional = token.endsWith(OPTIONAL_RESOLUTION);
@@ -527,25 +529,6 @@ public class HPI extends MavenArtifact {
                 if (scm == null) {
                     LOGGER.log(Level.FINE, "Failed to determine SCM URL from POM or parent POM of " + this.artifact.getGav());
                 }
-                scm = interpolateProjectName(scm);
-                String originalScm = scm;
-                scm = requireHttpsGitHubJenkinsciUrl(scm);
-                if (originalScm != null && scm == null) {
-                    LOGGER.log(Level.CONFIG, "Rejecting URL outside GitHub.com/jenkinsci for " + this.artifact.getGav() + ": " + originalScm);
-                }
-
-                if (scm == null) {
-                    // Last resort: check whether a ${artifactId}-plugin repo in jenkinsci exists, if so, use that
-                    scm = "https://github.com/jenkinsci/" + artifact.artifactId + "-plugin";
-                    LOGGER.log(Level.FINE, "Falling back to default pattern repo for " + this.artifact.getGav() + ": " + scm);
-
-                    String checkedScm = scm;
-                    // Check whether the fallback repo actually exists, if not, don't publish the repo name
-                    scm = requireGitHubRepoExistence(scm);
-                    if (scm == null) {
-                        LOGGER.log(Level.FINE, "Repository does not actually exist: " + checkedScm);
-                    }
-                }
                 scmUrl = scm;
             }
         }
@@ -575,52 +558,14 @@ public class HPI extends MavenArtifact {
 
     private List<String> labels;
 
-    public List<String> getLabels() throws IOException { // TODO this would be better in a different class, doesn't fit HPI type
-        if (labels == null) {
-            String scm = getScmUrl();
-
-            List<String> gitHubLabels = new ArrayList<>();
-            OrgAndRepo orgAndRepo = getOrgAndRepo(scm);
-            if (orgAndRepo != null) {
-
-                List<String> unsanitizedLabels = new ArrayList<>(Arrays.asList(
-                        GitHubSource.getInstance().getRepositoryTopics(orgAndRepo.org, orgAndRepo.repo).toArray(new String[0])));
-
-                for (String label : unsanitizedLabels) {
-                    if (label.startsWith("jenkins-")) {
-                        label = label.replaceFirst("jenkins-", "");
-                    }
-
-                    if (ALLOWED_GITHUB_LABELS.containsKey(label)) {
-                        gitHubLabels.add(label);
-                    }
-                }
-
-                if (!gitHubLabels.isEmpty()) {
-                    LOGGER.log(Level.FINE, () -> artifact.artifactId + " got the following labels contributed from GitHub: " + org.apache.commons.lang3.StringUtils.join(gitHubLabels, ", "));
-                }
-            }
-
-            Set<String> labels = new TreeSet<>(Arrays.asList(getLabelsFromFile()));
-            labels.addAll(gitHubLabels);
-
-            this.labels = new ArrayList<>(labels);
-        }
-        return this.labels;
+    public List<String> getLabels() throws IOException {
+        return Collections.emptyList();
     }
 
     private String defaultBranch;
 
-    public String getDefaultBranch() throws IOException { // TODO this would be better in a different class, doesn't fit HPI type
-        if (defaultBranch == null) {
-            String scm = getScmUrl();
-
-            OrgAndRepo orgAndRepo = getOrgAndRepo(scm);
-            if (orgAndRepo != null) {
-                defaultBranch = GitHubSource.getInstance().getDefaultBranch(orgAndRepo.org, orgAndRepo.repo);
-            }
-        }
-        return defaultBranch;
+    public String getDefaultBranch() throws IOException {
+        return "main";
     }
 
     // declared type is generic here because return value of com.google.common.base.Function::apply

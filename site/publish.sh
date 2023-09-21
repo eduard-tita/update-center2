@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 
 # Used later for rsyncing updates
-UPDATES_SITE="updates.jenkins.io"
+UPDATES_SITE="localhost:8888"
 RSYNC_USER="www-data"
 
 wget --no-verbose -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 || { echo "Failed to download jq" >&2 ; exit 1; }

@@ -2,6 +2,7 @@ package io.jenkins.update_center.json;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import io.jenkins.update_center.HPI;
+import io.jenkins.update_center.MavenRepository.ArtifactMetadata;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -47,7 +48,8 @@ class ReleaseHistoryEntry {
         }
         version = hpi.version;
         this.gav = hpi.artifact.getGav();
-        timestamp = hpi.repository.getMetadata(hpi).timestamp;
+        ArtifactMetadata metadata = hpi.repository.getMetadata(hpi);
+        timestamp = metadata != null ? metadata.timestamp : 0L;
         url = "https://plugins.jenkins.io/" + hpi.artifact.artifactId;
     }
 }
