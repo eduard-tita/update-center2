@@ -54,13 +54,13 @@ public class PluginEntry
     public long popularity;
 
     @JSONField
-    public Date previousTimestamp;
+    public String previousTimestamp;
 
     @JSONField
     public String previousVersion;
 
     @JSONField
-    public Date releaseTimestamp;
+    public String releaseTimestamp;
 
     @JSONField
     public String requiredCore;
